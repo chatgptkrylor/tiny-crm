@@ -1,8 +1,8 @@
 # Tiny CRM
 
-A small CRM built on **.NET Framework 4.7**, **ASP.NET MVC 5**, **Razor views**, and **IIS** on the `WIN-IIS-DEV` Windows Server VM. SQL Express holds `ShopCRM`.
+A small CRM built on **.NET Framework 4.7**, **ASP.NET MVC 5**, **Razor views**, and **IIS** on the `WIN-IIS-DEV` Windows Server VM.
 
-This repo is the **legacy** stack only. The Vue / .NET 10 edition lives in [tiny-crm-net10-vue](https://github.com/chatgptkrylor/tiny-crm-net10-vue).
+This repo is the **legacy** stack only. The Vue / .NET 10 edition lives in [tiny-crm-net10-vue](https://github.com/chatgptkrylor/tiny-crm-net10-vue). Both apps use the same SQL Server database.
 
 ## Stack
 
@@ -11,7 +11,7 @@ This repo is the **legacy** stack only. The Vue / .NET 10 edition lives in [tiny
 | UI | Razor views, Bootstrap 4 |
 | App | .NET Framework 4.7, ASP.NET MVC 5 |
 | Auth | Server-side sessions, BCrypt, 20-minute timeout |
-| Data | SQL Server Express (`ShopCRM`) on WIN-IIS-DEV |
+| Data | SQL Server Express on WIN-IIS-DEV (same database as the Vue edition) |
 | Host | IIS, app pool `ShopAppPool`, site `/Shop` |
 
 ## Run it
