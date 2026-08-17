@@ -1,0 +1,70 @@
+@model Shop.Models.DashboardViewModel
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+<p class="text-muted">Welcome back, @Model.Username!</p>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Customers</h5>
+                <p class="display-4">@Model.TotalCustomers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">Customers by Status</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead><tr><th>Status</th><th>Count</th></tr></thead>
+                    <tbody>
+                        @foreach (var sc in Model.StatusCounts)
+                        {
+                            <tr><td>@sc.Status</td><td>@sc.Count</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header">Recent Interactions</div>
+            <div class="card-body">
+                @if (Model.RecentInteractions.Count == 0)
+                {
+                    <p class="text-muted">No recent interactions.</p>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var i in Model.RecentInteractions)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><span class="badge badge-secondary mr-2">@i.Type</span>@i.Note</span>
+                                <small class="text-muted">@i.LoggedByUsername &middot; @i.LoggedAt.ToString("MMM dd")</small>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header">Quick Access</div>
+            <div class="card-body">
+                <a href="@Url.Action("Create", "Customers")" class="btn btn-success btn-block mb-2">New Customer</a>
+                <a href="@Url.Action("Index", "Reports")" class="btn btn-info btn-block mb-2">View Reports</a>
+                <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger btn-block">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>

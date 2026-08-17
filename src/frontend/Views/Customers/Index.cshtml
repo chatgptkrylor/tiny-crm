@@ -1,0 +1,54 @@
+@model List<Shop.Models.Customer>
+@{
+    ViewBag.Title = "Customers";
+    int currentPage = (int)ViewBag.CurrentPage;
+    int totalPages = (int)ViewBag.TotalPages;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Customers</h2>
+    <a href="@Url.Action("Create", "Customers")" class="btn btn-success">New Customer</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Company</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Name</td>
+                <td>@c.Email</td>
+                <td>@c.Phone</td>
+                <td>@c.Company</td>
+                <td><span class="badge badge-@(c.Status == "Lead" ? "warning" : c.Status == "Contact" ? "info" : "success")">@c.Status</span></td>
+                <td>
+                    <a href="@Url.Action("Details", "Customers", new { id = c.Id })" class="btn btn-sm btn-info">Details</a>
+                    <a href="@Url.Action("Edit", "Customers", new { id = c.Id })" class="btn btn-sm btn-warning">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (totalPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    @Html.ActionLink(i.ToString(), "Index", "Customers", new { page = i }, new { @class = "page-link" })
+                </li>
+            }
+        </ul>
+    </nav>
+}

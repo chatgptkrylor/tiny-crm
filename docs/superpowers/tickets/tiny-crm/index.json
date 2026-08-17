@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "feature_id": "tiny-crm",
+  "spec_path": "docs/superpowers/specs/tiny-crm.md",
+  "spec_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+  "approval_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+  "tickets": [
+    {
+      "schema_version": 1,
+      "id": "T01",
+      "title": "Scaffold MVC project, web.config, IIS site, git bare repo",
+      "risk": "high",
+      "risk_reasons": [
+        "Release infrastructure + IIS + git setup; foundation every other ticket depends on"
+      ],
+      "depends_on": [],
+      "owns": [
+        "legacy-CRM-app/src/",
+        "legacy-CRM-app/vmexec.sh"
+      ],
+      "verification_commands": [
+        "bash legacy-CRM-app/vmexec.sh 'powershell -NoProfile -ExecutionPolicy Bypass -File C:\\src\\verify-t02.ps1'"
+      ],
+      "spec_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+      "approval_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621"
+    },
+    {
+      "schema_version": 1,
+      "id": "T02",
+      "title": "SQL schema script + DB init on guest via WinRM",
+      "risk": "high",
+      "risk_reasons": [
+        "Destructive DDL creating schema; data layer foundation"
+      ],
+      "depends_on": [
+        "T01"
+      ],
+      "owns": [
+        "legacy-CRM-app/src/sql/"
+      ],
+      "verification_commands": [
+        "bash legacy-CRM-app/vmexec.sh 'powershell -NoProfile -ExecutionPolicy Bypass -File C:\\src\\verify-t02.ps1'"
+      ],
+      "spec_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+      "approval_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621"
+    },
+    {
+      "schema_version": 1,
+      "id": "T03",
+      "title": "Repository layer + DbConnectionFactory + models",
+      "risk": "normal",
+      "risk_reasons": [
+        "Pure data-access code; no security boundary; verified by compile"
+      ],
+      "depends_on": [
+        "T02"
+      ],
+      "owns": [
+        "legacy-CRM-app/src/Repository/",
+        "legacy-CRM-app/src/Infrastructure/DbConnectionFactory.cs",
+        "legacy-CRM-app/src/Models/"
+      ],
+      "verification_commands": [
+        "bash legacy-CRM-app/vmexec.sh 'powershell -NoProfile -ExecutionPolicy Bypass -File C:\\src\\Shop\\build-csc.ps1'"
+      ],
+      "spec_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+      "approval_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621"
+    },
+    {
+      "schema_version": 1,
+      "id": "T04",
+      "title": "SessionAuthAttribute + AccountController (login/logout)",
+      "risk": "high",
+      "risk_reasons": [
+        "Authentication, authorization, session initialization \u2014 security boundary"
+      ],
+      "depends_on": [
+        "T03"
+      ],
+      "owns": [
+        "legacy-CRM-app/src/Infrastructure/SessionAuthAttribute.cs",
+        "legacy-CRM-app/src/Controllers/AccountController.cs",
+        "legacy-CRM-app/src/Views/Account/",
+        "legacy-CRM-app/src/Views/Shared/_LoginLayout.cshtml"
+      ],
+      "verification_commands": [
+        "bash legacy-CRM-app/vmexec.sh 'powershell -NoProfile -ExecutionPolicy Bypass -File C:\\src\\Shop\\build-csc.ps1'"
+      ],
+      "spec_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+      "approval_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621"
+    },
+    {
+      "schema_version": 1,
+      "id": "T05",
+      "title": "Shared layout + Bootstrap 4 + Dashboard controller/view",
+      "risk": "normal",
+      "risk_reasons": [
+        "UI-only; no security boundary"
+      ],
+      "depends_on": [
+        "T04"
+      ],
+      "owns": [
+        "legacy-CRM-app/src/Views/Shared/_Layout.cshtml",
+        "legacy-CRM-app/src/Views/Shared/Error.cshtml",
+        "legacy-CRM-app/src/Controllers/DashboardController.cs",
+        "legacy-CRM-app/src/Views/Dashboard/"
+      ],
+      "verification_commands": [
+        "bash legacy-CRM-app/vmexec.sh 'powershell -NoProfile -ExecutionPolicy Bypass -File C:\\src\\Shop\\build-csc.ps1'"
+      ],
+      "spec_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+      "approval_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621"
+    },
+    {
+      "schema_version": 1,
+      "id": "T06",
+      "title": "CustomersController CRUD + views",
+      "risk": "normal",
+      "risk_reasons": [
+        "Standard CRUD over parameterized SQL; no security boundary beyond session"
+      ],
+      "depends_on": [
+        "T05"
+      ],
+      "owns": [
+        "legacy-CRM-app/src/Controllers/CustomersController.cs",
+        "legacy-CRM-app/src/Views/Customers/"
+      ],
+      "verification_commands": [
+        "bash legacy-CRM-app/vmexec.sh 'powershell -NoProfile -ExecutionPolicy Bypass -File C:\\src\\Shop\\build-csc.ps1'"
+      ],
+      "spec_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+      "approval_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621"
+    },
+    {
+      "schema_version": 1,
+      "id": "T07",
+      "title": "InteractionsController + interaction history in Customer Details",
+      "risk": "normal",
+      "risk_reasons": [
+        "Standard create + list; no new security boundary"
+      ],
+      "depends_on": [
+        "T06"
+      ],
+      "owns": [
+        "legacy-CRM-app/src/Controllers/InteractionsController.cs",
+        "legacy-CRM-app/src/Views/Customers/Details.cshtml"
+      ],
+      "verification_commands": [
+        "bash legacy-CRM-app/vmexec.sh 'powershell -NoProfile -ExecutionPolicy Bypass -File C:\\src\\Shop\\build-csc.ps1'"
+      ],
+      "spec_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+      "approval_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621"
+    },
+    {
+      "schema_version": 1,
+      "id": "T08",
+      "title": "ReportsController + view with bars",
+      "risk": "normal",
+      "risk_reasons": [
+        "Read-only aggregate query; no security boundary"
+      ],
+      "depends_on": [
+        "T06"
+      ],
+      "owns": [
+        "legacy-CRM-app/src/Controllers/ReportsController.cs",
+        "legacy-CRM-app/src/Views/Reports/"
+      ],
+      "verification_commands": [
+        "bash legacy-CRM-app/vmexec.sh 'powershell -NoProfile -ExecutionPolicy Bypass -File C:\\src\\Shop\\build-csc.ps1'"
+      ],
+      "spec_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+      "approval_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621"
+    },
+    {
+      "schema_version": 1,
+      "id": "T09",
+      "title": "Seed data verification, end-to-end smoke test, AI write-up doc",
+      "risk": "normal",
+      "risk_reasons": [
+        "Verification-only; no new code paths"
+      ],
+      "depends_on": [
+        "T08",
+        "T07"
+      ],
+      "owns": [
+        "legacy-CRM-app/src/docs/AI-TOOLS-USAGE.md"
+      ],
+      "verification_commands": [
+        "bash legacy-CRM-app/vmexec.sh 'Test-Path C:\\src\\Shop\\docs\\AI-TOOLS-USAGE.md'"
+      ],
+      "spec_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621",
+      "approval_hash": "3a794da9a07ae4c2148224791e33f1e1f12cba832ddef3cb2b8c0b81bfa60621"
+    }
+  ]
+}

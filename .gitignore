@@ -1,0 +1,50 @@
+# Build artifacts
+bin/
+obj/
+packages/
+
+# IDE
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Playwright CLI sessions
+.playwright-cli/
+
+# Superpowers orchestrator state
+.agents/
+
+# Git worktrees
+.worktrees/
+
+# Bare repo
+Shop.git/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temp
+*.tmp
+*.log
+*.bundle
+# .NET 10 build artifacts
+src/backend-net10/**/bin/
+src/backend-net10/**/obj/
+
+# Vue build output (only .gitkeep is tracked)
+src/backend-net10/ShopApi/wwwroot/*
+!src/backend-net10/ShopApi/wwwroot/.gitkeep
+
+# Vue node_modules
+src/frontend-vue/node_modules/
+
+# Local agent / graph artifacts (not app source)
+.superpowers/
+graphify-out/
+
+# Accidental empty npm files at repo root
+/package.json
+/package-lock.json

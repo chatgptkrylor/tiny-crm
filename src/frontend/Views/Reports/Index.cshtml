@@ -1,0 +1,31 @@
+@model Shop.Models.ReportViewModel
+@{
+    ViewBag.Title = "Reports";
+}
+
+<h2>Customer Report</h2>
+<p class="text-muted">Total customers: @Model.TotalCustomers</p>
+
+<div class="card">
+    <div class="card-header">Customers by Status</div>
+    <div class="card-body">
+        <table class="table">
+            <thead><tr><th>Status</th><th>Count</th><th>Distribution</th></tr></thead>
+            <tbody>
+                @foreach (var sc in Model.StatusCounts)
+                {
+                    var pct = Model.TotalCustomers > 0 ? (sc.Count * 100 / Model.TotalCustomers) : 0;
+                    <tr>
+                        <td>@sc.Status</td>
+                        <td>@sc.Count</td>
+                        <td>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar" role="progressbar" style="width: @pct%;" aria-valuenow="@sc.Count" aria-valuemin="0" aria-valuemax="@Model.TotalCustomers">@pct%</div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

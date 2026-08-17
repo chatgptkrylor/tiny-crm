@@ -1,0 +1,66 @@
+@model Shop.Models.Customer
+@{
+    ViewBag.Title = "Customer Details";
+    var interactions = ViewBag.Interactions as List<Shop.Models.Interaction>;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>@Model.Name</h2>
+    <div>
+        <a href="@Url.Action("Edit", "Customers", new { id = Model.Id })" class="btn btn-warning btn-sm">Edit</a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">Customer Info</div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.Email</dd>
+            <dt class="col-sm-3">Phone</dt><dd class="col-sm-9">@Model.Phone</dd>
+            <dt class="col-sm-3">Company</dt><dd class="col-sm-9">@Model.Company</dd>
+            <dt class="col-sm-3">Status</dt><dd class="col-sm-9"><span class="badge badge-@(Model.Status == "Lead" ? "warning" : Model.Status == "Contact" ? "info" : "success")">@Model.Status</span></dd>
+            <dt class="col-sm-3">Created</dt><dd class="col-sm-9">@Model.CreatedAt.ToString("MMM dd, yyyy")</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Interaction History</div>
+    <div class="card-body">
+        @if (interactions != null && interactions.Count > 0)
+        {
+            <ul class="list-group mb-3">
+                @foreach (var i in interactions)
+                {
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between">
+                            <span><span class="badge badge-secondary mr-2">@i.Type</span>@i.Note</span>
+                            <small class="text-muted">@i.LoggedByUsername &middot; @i.LoggedAt.ToString("MMM dd, yyyy HH:mm")</small>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">No interactions logged yet.</p>
+        }
+
+        <hr />
+        <h6>Log New Interaction</h6>
+        @using (Html.BeginForm("Create", "Interactions", new { customerId = Model.Id }, FormMethod.Post, new { @class = "form-inline" }))
+        {
+            @Html.AntiForgeryToken()
+            <select name="Type" class="form-control mr-2">
+                <option value="Call">Call</option>
+                <option value="Email">Email</option>
+                <option value="Meeting">Meeting</option>
+                <option value="Note">Note</option>
+            </select>
+            <input type="text" name="Note" class="form-control mr-2 flex-grow-1" placeholder="Note..." required />
+            <button type="submit" class="btn btn-primary btn-sm">Log</button>
+        }
+    </div>
+</div>
+
+<a href="@Url.Action("Index", "Customers")" class="btn btn-secondary mt-3">Back to List</a>
